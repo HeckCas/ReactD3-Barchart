@@ -1,26 +1,32 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './index.css';
+import BarChart from './BarChart';
+import imgD3 from './media/d3.png';
+import imgReact from './media/react.png';
 
 class App extends Component {
+
+  state = {
+     data: new Array(9).fill(0).map( n => Math.floor(Math.random() * 300)),
+   }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="wrapper">
+        <h1>Hecho con d3.js y React</h1>
+        <div className="display">
+        <figure>
+          <img src= { imgD3 } width="200px" height="200px"/>
+        </figure>
+        <div id="d3-content">
+          <BarChart data={ this.state.data } />
+        </div>
+        <figure>
+          <img src= { imgReact } width="280px" height="220px"/>
+        </figure>
       </div>
+    </div>
     );
   }
 }

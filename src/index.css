@@ -1,14 +1,52 @@
-body {
+@import url('https://fonts.googleapis.com/css?family=Bungee');
+* {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+body {
+  background: url('./pattern.png');
+}
+
+h1 {
+  text-align: center;
+  margin: 3%;
+  color: #D4B86C;
+  font-size: 68px;
+  text-shadow: 5px 10px 8px #293234;
+  font-family: 'Bungee' , cursive;
+  letter-spacing: 4px;
+}
+#d3-content {
+  display: flex;
+  flex-direction: row;
+  align-items: space-around;
+  height: 400px;
+}
+.display {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 400px;
+}
+figure {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.svg-layout {
+  background-color: #293234;
+  box-shadow: 5px 5px 8px #5CC9F5;
+  padding-left: 3px;
+margin-left: 65px;
+}
+.bar-text {
+  fill: #FFF;
+  font-size: 10px;
+
+}
+.bar-layout {
+  fill: #016FFF;
 }
