@@ -22,8 +22,7 @@ class BarChart extends Component {
     let barPadding = 10;
     let barWidth = ((width / dataset.length));
 
-
-      //drawing the chart
+    //Drawing the chart
 
     let yScale = d3.scaleLinear()
         .domain([0, 1])
@@ -37,27 +36,36 @@ class BarChart extends Component {
         .append("g")
         .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
-      let barChart = svg.selectAll('rect')
+        //Charts Creation and fill
+
+      svg.selectAll('rect')
         .data(dataset)
         .enter()
         .append('rect')
-        .attr('class', 'bar-layout')
-        .attr( 'y', function(d) { return  height - yScale(d.idh)} )
+        .attr('fill', '#016FFF')
+        .attr( 'y', function(d) { return  height - yScale(d.idh) } )
         .attr( 'height', (d) => { return yScale(d.idh) } )
         .attr( 'width', barWidth - barPadding )
-        .attr( 'x', (d, i) => { return barWidth * i });
+        .attr( 'x', (d, i) => { return barWidth * i })
+        // .on('mouseover',function(d){
+        //   if(d.name == "Chihuahua") {
+        //     d3.select(this)
+        //       .attr('fill','#4AF2A1')}
+        //   })
+        // .on('mouseout',function(d){
+        //   d3.select(this)
+        //     .attr('fill','#016FFF')});
 
-        let barValue = svg.selectAll("text")
+        //BarChart values append section
+
+      svg.selectAll("text")
           .data(dataset)
           .enter()
           .append( "text" )
           .text( (d) => d.idh.toFixed(2) )
           .attr( 'class', 'bar-text')
-          .attr( 'y', function(d) { return  height - yScale(d.idh) - 3})
-          .attr( 'x', (d, i) => { return barWidth * i + 1});
-
-
-      //Parte que no entiendo
+          .attr( 'y', function(d) { return  height - yScale(d.idh) - 3 })
+          .attr( 'x', (d, i) => { return barWidth * i + 1 });
 
       //Draw Axis Section
 
@@ -75,11 +83,10 @@ class BarChart extends Component {
         .style("text-anchor", "end")
         .style("color", "white")
         .attr("dx", "-0.3em")
-        .attr("dy", (d, i) => { return i + barPadding} )
+        .attr("dy", (d, i) => { return i + barPadding } )
         .attr("y", -21)
         .attr("x", -7)
-        .attr("transform", "rotate(-80)")
-    ;
+        .attr("transform", "rotate(-85)");
 
       svg.append("g")
         .attr("class", "y axis")
@@ -92,11 +99,36 @@ class BarChart extends Component {
         .attr("text-anchor", "center")
         .text("IDH ");
 
+    // Menu to stablish Entity
+
+      let menu = d3.select("#menu select")
+          .attr("class", "menu")
+          .on("change", changeColor());
+
+      menu.selectAll("option")
+          .data(dataset)
+          .enter()
+          .append("option")
+          .attr("value", function (d) { return d.name })
+          .text(function (d) { return d.name })
 
 
-      //Termina Parte que no entiendo
+      function changeColor() {
+        d3.select("select")
+          console.log(menu.node().value);
+          debugger
+          // .on("change", function (d) {
+          //   let selected = d3.select("#menu select").node().value;
+          //   console.log( selected );
+          // })
+
+      }
+
 
     }
+
+
+
 
   render() {
     return <div></div>

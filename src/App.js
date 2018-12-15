@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './index.css';
 import BarChart from './BarChart';
-import imgD3 from './media/d3.png';
-import imgReact from './media/react.png';
 
 class App extends Component {
 
@@ -12,7 +10,7 @@ class App extends Component {
        {"name": "Baja California",  "idh": this.generateRandom() },
        {"name": "Baja California Sur",  "idh": this.generateRandom() },
        {"name": "Campeche",  "idh": this.generateRandom() },
-       {"name": "CDMX ",  "idh": this.generateRandom() },
+       {"name": "CDMX",  "idh": this.generateRandom() },
        {"name": "Chiapas", "idh": this.generateRandom() },
        {"name": "Chihuahua", "idh": this.generateRandom() },
        {"name": "Coahuila",  "idh": this.generateRandom() },
@@ -52,7 +50,7 @@ class App extends Component {
       <div className="wrapper">
         <h1>Hecho con d3.js y React</h1>
         <div className="display">
-
+          <div id="menu" className="menu"><select></select></div>
         <div id="d3-content">
           <BarChart data={ this.state.data } />
         </div>

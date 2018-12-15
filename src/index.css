@@ -17,6 +17,7 @@ h1 {
   text-shadow: 5px 10px 8px #293234;
   font-family: 'Bungee' , cursive;
   letter-spacing: 4px;
+  margin-bottom: 5%;
 }
 #d3-content {
 
@@ -43,8 +44,13 @@ figure {
   font-family: 'Century Gothic';
 
 }
-.bar-layout {
-  fill: #016FFF;
+
+.menu {
+  background: rgba(0,0,0, 0.2);
+  color: white;
+  height: 50px;
+  width: 150px;
+  font-size: 15px;
 }
 
 .axis {
