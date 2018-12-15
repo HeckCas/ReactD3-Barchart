@@ -2,11 +2,11 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
 body {
   background: url('./pattern.png');
+
 }
 
 h1 {
@@ -19,10 +19,7 @@ h1 {
   letter-spacing: 4px;
 }
 #d3-content {
-  display: flex;
-  flex-direction: row;
-  align-items: space-around;
-  height: 400px;
+
 }
 .display {
   display: flex;
@@ -39,14 +36,24 @@ figure {
 .svg-layout {
   background-color: #293234;
   box-shadow: 5px 5px 8px #5CC9F5;
-  padding-left: 3px;
-margin-left: 65px;
 }
 .bar-text {
   fill: #FFF;
   font-size: 10px;
+  font-family: 'Century Gothic';
 
 }
 .bar-layout {
   fill: #016FFF;
+}
+
+.axis {
+  font-size: 15px;
+  fill: #FFF;
+}
+
+.axis path, .axis line {
+  fill: white;
+  stroke: #dadada;
+  shape-rendering: crispEdges;
 }
