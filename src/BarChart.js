@@ -2,61 +2,79 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import './index.css';
 
+let chart, dataset, xScale, yScale, xAxis, yAxis;
+let xDomain, yDomain, svg;
+let margin = {top: 20, right: 20, bottom: 200, left: 60},
+width = 1000 - margin.left - margin.right,
+height = 500 - margin.top - margin.bottom;
+let barPadding = 5;
+let barWidth = ((width / 32));
+let yDataScale = d3.scaleLinear()
+.domain([0, 1])
+.range([0, height - margin.top])
+
 class BarChart extends Component {
+  dataset = this.props.data;
+
+  constructor(props){
+    super(props)
+    this.state = {}
+  }
 
   componentDidMount() {
     this.drawChart();
+
+  }
+
+  toggleColor() {
+    for(let i=0; i< dataset.length; i++)
+    {
+      if( this.props.value === dataset[i].name){
+        dataset[i].color = true;
+      }
+    }
+    console.log(dataset);
   }
 
   drawChart() {
-        const dataset = this.props.data;
 
-    let margin = {top: 20, right: 20, bottom: 150, left: 60},
-        width = 800 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
-    let x = d3.scaleBand()
-        .rangeRound([0, width])
-        .padding(0.5);
-    let y = d3.scaleLinear()
-        .range([height, 0]);
-    let barPadding = 10;
-    let barWidth = ((width / dataset.length));
-
+    dataset = this.props.data; //Info para el dataset, pasados desde el componente App.js
+    this.toggleColor();
+    barWidth = ((width / dataset.length));
     //Drawing the chart
 
-    let yScale = d3.scaleLinear()
-        .domain([0, 1])
-        .range([0, height - margin.top ])
-
-    let svg =  d3.select('#d3-content')
+    svg =  d3.select('#d3-content')
         .append('svg')
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.bottom + margin.top)
-        .attr('class', 'svg-layout')
-        .append("g")
-        .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
-        //Charts Creation and fill
+  //  Dominios X y Y
 
-      svg.selectAll('rect')
-        .data(dataset)
-        .enter()
-        .append('rect')
-        .attr('fill', '#016FFF')
-        .attr( 'y', function(d) { return  height - yScale(d.idh) } )
-        .attr( 'height', (d) => { return yScale(d.idh) } )
-        .attr( 'width', barWidth - barPadding )
-        .attr( 'x', (d, i) => { return barWidth * i })
-        // .on('mouseover',function(d){
-        //   if(d.name == "Chihuahua") {
-        //     d3.select(this)
-        //       .attr('fill','#4AF2A1')}
-        //   })
-        // .on('mouseout',function(d){
-        //   d3.select(this)
-        //     .attr('fill','#016FFF')});
+   xDomain = (dataset.map(function (d) { return d.name }));
+   yDomain = ([0, parseFloat(d3.max(dataset, function (d) {return d.idh }))]);
 
-        //BarChart values append section
+  //Ahora las escalas
+
+   xScale = d3.scaleBand().padding(0.1).domain(xDomain).rangeRound([0, width]);
+   yScale = d3.scaleLinear().domain(yDomain).rangeRound([height,0]);
+
+   console.log(typeof(xScale));
+   xAxis = svg.append("g")
+      .attr("class", "axis")
+      .attr("transform", `translate(${ margin.left }, ${ margin.top + height })`)
+      .call(d3.axisBottom( xScale ))
+  .selectAll("text")
+      .attr("y", 7)
+      .attr("x", -5)
+      .attr("dy", '.35em')
+      .attr("transform", 'rotate(-45)')
+      .style("text-anchor", 'end')
+      .attr("class", "bar-text")
+
+   yAxis = svg.append("g")
+      .attr("class", "axis")
+      .attr("transform", `translate(${ margin.left }, ${ margin.top })`)
+      .call(d3.axisLeft(yScale))
 
       svg.selectAll("text")
           .data(dataset)
@@ -64,75 +82,38 @@ class BarChart extends Component {
           .append( "text" )
           .text( (d) => d.idh.toFixed(2) )
           .attr( 'class', 'bar-text')
-          .attr( 'y', function(d) { return  height - yScale(d.idh) - 3 })
+          .attr( 'y', function(d) { return  height - yDataScale(d.idh) - 3 })
           .attr( 'x', (d, i) => { return barWidth * i + 1 });
 
-      //Draw Axis Section
 
-      let xAxis = d3.axisBottom().scale(x)
-      let yAxis = d3.axisLeft().scale(y).ticks(100);
-
-      x.domain(dataset.map(function (d) { return d.name }));
-      y.domain([0, d3.max(100, function (d) {return d.idh })]);
-
-      svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0, " + height +")")
-        .call(xAxis)
-        .selectAll('text')
-        .style("text-anchor", "end")
-        .style("color", "white")
-        .attr("dx", "-0.3em")
-        .attr("dy", (d, i) => { return i + barPadding } )
-        .attr("y", -21)
-        .attr("x", -7)
-        .attr("transform", "rotate(-85)");
-
-      svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis)
-        .append("text")
-        .attr("transform", "rotate(0)")
-        .attr("y",0)
-        .attr("x", 30)
-        .attr("dy", "0.8em")
-        .attr("text-anchor", "center")
-        .text("IDH ");
-
-    // Menu to stablish Entity
-
-      let menu = d3.select("#menu select")
-          .attr("class", "menu")
-          .on("change", changeColor());
-
-      menu.selectAll("option")
+      const bars = svg.append("g").attr("class", "bars")
+            .attr('transform', `translate(${ margin.left }, 20)`)
+          // console.log(xDomain);
+      const update = bars.selectAll('.bar')
           .data(dataset)
+        console.log(yDomain);
+        console.log(this.props.value);
+        update
           .enter()
-          .append("option")
-          .attr("value", function (d) { return d.name })
-          .text(function (d) { return d.name })
+          .append('rect')
+          .attr('class', 'bar')
+          .attr('height', 0 )
+          .attr('width', xScale.bandwidth() )
+          .attr('y', (d) => { return yScale(0) } )
+          .attr('x', (d) => { return xScale(d.name) })
+          .attr('fill', '#016FFF')
+          .transition()
+          .delay((d, i) => i * 20 )
+          .attr('y', d => { return yScale(d.idh)} )
+          .attr('height', function(d) { return  (height - yScale(d.idh))  })
+          // .attr('transform','rotate(90)');
 
-
-      function changeColor() {
-        d3.select("select")
-          console.log(menu.node().value);
-          debugger
-          // .on("change", function (d) {
-          //   let selected = d3.select("#menu select").node().value;
-          //   console.log( selected );
-          // })
 
       }
-
-
-    }
-
-
-
-
   render() {
-    return <div></div>
+    return (<div></div>);
   }
 }
+
 
 export default BarChart;

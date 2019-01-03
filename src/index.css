@@ -4,50 +4,22 @@
   padding: 0;
 }
 
-body {
-  background: url('./pattern.png');
-
-}
-
-h1 {
-  text-align: center;
-  margin: 3%;
-  color: #D4B86C;
-  font-size: 68px;
-  text-shadow: 5px 10px 8px #293234;
-  font-family: 'Bungee' , cursive;
-  letter-spacing: 4px;
-  margin-bottom: 5%;
-}
 #d3-content {
-
-}
-.display {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: 400px;
-}
-figure {
-  display: flex;
-  justify-content: center;
+  margin-top: 5%;
+  width: 100%;
+  height: auto;
   margin: 0 auto;
+  text-align: center;
 }
 
-.svg-layout {
-  background-color: #293234;
-  box-shadow: 5px 5px 8px #5CC9F5;
-}
 .bar-text {
-  fill: #FFF;
+  fill: #293234;
   font-size: 10px;
   font-family: 'Century Gothic';
-
 }
 
 .menu {
   background: rgba(0,0,0, 0.2);
-  color: white;
   height: 50px;
   width: 150px;
   font-size: 15px;
@@ -55,11 +27,4 @@ figure {
 
 .axis {
   font-size: 15px;
-  fill: #FFF;
-}
-
-.axis path, .axis line {
-  fill: white;
-  stroke: #dadada;
-  shape-rendering: crispEdges;
 }
