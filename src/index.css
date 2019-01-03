@@ -23,8 +23,21 @@
   height: 50px;
   width: 150px;
   font-size: 15px;
+  margin: 50px;
 }
-
 .axis {
   font-size: 15px;
+}
+.card {
+  width: 40%;
+  height: auto;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 1% 1.5%;
+  text-align: center;
+  color: white;
+  margin: auto;
+  margin-bottom: 1.2%;
+  font-family: 'Century Gothic';
+  border-top-left-radius: 30px;
+  border-bottom-right-radius: 30px;
 }

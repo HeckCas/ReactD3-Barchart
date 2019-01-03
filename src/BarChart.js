@@ -7,14 +7,9 @@ let xDomain, yDomain, svg;
 let margin = {top: 20, right: 20, bottom: 200, left: 60},
 width = 1000 - margin.left - margin.right,
 height = 500 - margin.top - margin.bottom;
-let barWidth = ((width / 32));
-let yDataScale = d3.scaleLinear()
-.domain([0, 1])
-.range([0, height - margin.top])
 
-class BarChart extends Component {
+export class BarChart extends Component {
   dataset = this.props.data;
-
   constructor(props){
     super(props)
     this.state = {}
@@ -57,22 +52,12 @@ class BarChart extends Component {
       .attr("transform", `translate(${ margin.left }, ${ margin.top })`)
       .call(d3.axisLeft(yScale))
 
-      svg.selectAll("text")
-          .data(dataset)
-          .enter()
-          .append( "text" )
-          .text( (d) => d[1].toFixed(2) )
-          .attr( 'class', 'bar-text')
-          .attr( 'y', function(d) { return  height - yDataScale(d[1]) - 3 })
-          .attr( 'x', (d, i) => { return barWidth * i + 1 });
     }
 
     reDrawChart() {
 
     d3.select('svg').remove();
-
     this.drawChart();
-
     const bars = svg.append("g").attr("class", "bars")
           .attr('transform', `translate(${ margin.left }, 20)`)
     const update = bars.selectAll('.bar')
@@ -86,17 +71,28 @@ class BarChart extends Component {
         .attr('width', xScale.bandwidth() )
         .attr('y', (d) => { return yScale(0) } )
         .attr('x', (d) => { return xScale(d[0]) })
-        .style('fill', '#016FFF')
+        .style('fill', function(d) { if(d[2]) return '#B0F566';
+                                    else return '#016FFF';})
         .transition()
         .delay((d, i) => i * 20 )
         .attr('y', d => { return yScale(d[1])} )
         .attr('height', function(d) { return  (height - yScale(d[1]))  })
+
+    bars.selectAll("text")
+        .data(dataset)
+        .enter()
+        .append( "text" )
+        .text( (d) => d[1].toFixed(2))
+        .attr('y', -250)
+        .attr('x', (d) => { return xScale(d[0]) })
+        .transition()
+        .delay((d, i) => i * 20 )
+        .attr( 'class', 'bar-text')
+        .attr('y', d => { return yScale(d[1]) - 5 } )
+        .attr('x', (d) => { return xScale(d[0]) + 5 })
     update.exit().remove();
     }
   render() {
     return (<div></div>);
   }
 }
-
-
-export default BarChart;

@@ -1,57 +1,56 @@
 import React, { Component } from 'react';
 import './index.css';
-import BarChart from './BarChart';
+import { BarChart } from './BarChart';
+import { Card } from './Card'
 
   let states = ['Aguascalientes','Baja California','Baja California Sur','Campeche','Chiapas','Chihuahua','CDMX','Coahuila','Colima','Durango','Estado de México',
   'Guanajuato','Guerrero','Hidalgo','Jalisco','Michoacán','Morelos','Nayarit','Nuevo León','Oaxaca','Puebla','Querétaro','Quintana Roo','San Luis Potosí','Sinaloa','Sonora',
   'Tabasco','Tamaulipas','Tlaxcala','Veracruz','Yucatán','Zacatecas'];
-
   let statesAbv = ['AGU','BCN','BCS','CAM','CHP','CHH','CMX','COA','COL','DUR','MEX',
   'GUA','GRO','HID','JAL','MIC','MOR','NAY','NLE','OAX','PUE','QUE','ROO','SLP','SIN','SON',
   'TAB','TAM','TLA','VER','YUC','ZAC'];
-
   let years = ['1994','1995','1996','1997','1998','1999','2000'];
   let tipoOrdenamiento = ['Alfabéticamente','Ascendente','Descendente'];
 
-class App extends Component {
+export class App extends Component {
 
   constructor(props) {
     super(props);
     let dataset = this.generateData();
     this.state = {
-       data : [
-         ["Aguascalientes",  Math.random(), false ],
-         ["Baja California",  Math.random(), false ],
-         ["Baja California Sur",  Math.random(), false ],
-         ["Campeche",  Math.random(), false ],
-         ["CDMX",  Math.random(), false ],
-         ["Chiapas", Math.random(), false ],
-         ["Chihuahua", Math.random(), false ],
-         ["Coahuila",  Math.random(), false ],
-         ["Colima",  Math.random(), false ],
-         ["Durango",  Math.random(), false ],
-         ["Estado de México",  Math.random(), false ],
-         ["Guanajuato",  Math.random(), false ],
-         ["Guerrero", Math.random(), false ],
-         ["Hidalgo", Math.random(), false ],
-         ["Jalisco",  Math.random(), false ],
-         ["Michoacan",  Math.random(), false ],
-         ["Morelos",  Math.random(), false ],
-         ["Nayarit",  Math.random(), false ],
-         ["Nuevo Leon", Math.random(), false ],
-         ["Oaxaca", Math.random(), false ],
-         ["Puebla",  Math.random(), false ],
-         ["Queretaro",  Math.random(), false ],
-         ["Quintana Roo",  Math.random(), false ],
-         ["San Luis Potosí",  Math.random(), false ],
-         ["Sinaloa", Math.random(), false ],
-         ["Sonora", Math.random(), false ],
-         ["Tabasco",  Math.random(), false ],
-         ["Tamaulipas",  Math.random(), false ],
-         ["Tlaxcala",  Math.random(), false ],
-         ["Veracruz",  Math.random(), false ],
-         ["Yucatán", Math.random(), false ],
-         ["Zacatecas", Math.random(), false ],
+     data : [
+       ["Aguascalientes",  Math.random(), false ],
+       ["Baja California",  Math.random(), false ],
+       ["Baja California Sur",  Math.random(), false ],
+       ["Campeche",  Math.random(), false ],
+       ["CDMX",  Math.random(), false ],
+       ["Chiapas", Math.random(), false ],
+       ["Chihuahua", Math.random(), false ],
+       ["Coahuila",  Math.random(), true ],
+       ["Colima",  Math.random(), false ],
+       ["Durango",  Math.random(), false ],
+       ["Estado de México",  Math.random(), false ],
+       ["Guanajuato",  Math.random(), false ],
+       ["Guerrero", Math.random(), false ],
+       ["Hidalgo", Math.random(), false ],
+       ["Jalisco",  Math.random(), false ],
+       ["Michoacan",  Math.random(), false ],
+       ["Morelos",  Math.random(), false ],
+       ["Nayarit",  Math.random(), false ],
+       ["Nuevo Leon", Math.random(), false ],
+       ["Oaxaca", Math.random(), false ],
+       ["Puebla",  Math.random(), false ],
+       ["Queretaro",  Math.random(), false ],
+       ["Quintana Roo",  Math.random(), false ],
+       ["San Luis Potosí",  Math.random(), false ],
+       ["Sinaloa", Math.random(), false ],
+       ["Sonora", Math.random(), false ],
+       ["Tabasco",  Math.random(), false ],
+       ["Tamaulipas",  Math.random(), false ],
+       ["Tlaxcala",  Math.random(), false ],
+       ["Veracruz",  Math.random(), false ],
+       ["Yucatán", Math.random(), false ],
+       ["Zacatecas", Math.random(), false ],
        ],
        otraData: dataset,
        año : '1994',
@@ -59,12 +58,17 @@ class App extends Component {
        orden: 'Alfabéticamente',
        yearToSelect: 0,
        realData: [],
-  }
+       idhProm: '0',
+       idhMax: '0',
+       idhMin: '0',
+    }
     this.handleChangeYear = this.handleChangeYear.bind(this);
     this.handleChangeEstado = this.handleChangeEstado.bind(this);
     this.handleChangeOrden = this.handleChangeOrden.bind(this);
     this.dataReductor = this.dataReductor.bind(this);
+    this.generateSummary = this.generateSummary.bind(this);
   }
+
   generateData() {
     let allData = [];
     for (let f = 0; f < years.length; f++){
@@ -98,6 +102,7 @@ class App extends Component {
       }
       console.log(dataCont);
       return dataCont;
+
   }
 
   findYear(yearValue){
@@ -113,34 +118,57 @@ class App extends Component {
     this.setState({ año: yearValue });
     const yearSelected = this.findYear(yearValue);
     this.setState({ yearToSelect: yearSelected });
+    this.generateSummary(yearSelected)
   }
+
   handleChangeEstado(e) {
     const estadoValue = e.target.value;
     this.setState({ estado: estadoValue });
   }
+
   handleChangeOrden(e) {
     const ordenValue = e.target.value
     this.setState({ orden: ordenValue })
 
   }
 
-  componentDidMount() {
-  }
+  generateSummary(yearSelected){
+      //Obtener el promedio de todos los IDH
+      let promIDH = 0;
+      for(let i = 0; i < this.state.otraData[yearSelected].idh.length; i++){
+        promIDH += this.state.otraData[yearSelected].idh[i][2]; // Suma todos los IDH de un año determinado
+      }
+      promIDH = (promIDH / 32); // Calcula el promedio
+      let promIDHstr = promIDH.toFixed(2);
+      //Obtener el IDH más alto
+      this.state.otraData[yearSelected].idh.sort(function(a, b){return b[2] > a[2] ? 1 : -1}); // Obtiene el IDH del estado que quedó
+                                                                                           // como el más alto en el ordenamiento
+      let IDHmax = this.state.otraData[yearSelected].idh[1][2].toFixed(2);
+      //Obtener el ID más bajo
+      this.state.otraData[yearSelected].idh.sort(function(a, b){return a[2] > b[2] ? 1 : -1}); // Obtiene el IDH del estado que quedó
+                                                                                           // como el más bajo en el ordenamiento
+      let IDHmin = this.state.otraData[yearSelected].idh[1][2].toFixed(2);
+      this.setState({ idhProm: promIDHstr, idhMax: IDHmax, idhMin: IDHmin })
+    }
+
+  // componentDidMount() {
+  //   this.dataReductor();
+  // }
   render() {
     this.dataReductor();
     return (
       <div className="wrapper">
         <div id="d3-content">
           {/*Dropdown de Año*/}
-          <select onChange={ this.handleChangeYear }>
+          <select className='menu' onChange={ this.handleChangeYear }>
             {years.map(n => <option key={ n } value={ n }>{ n }</option>)}
           </select>
           {/*Dropdown de Estado*/}
-          <select onChange={ this.handleChangeEstado }>
+          <select className='menu' onChange={ this.handleChangeEstado }>
             {states.map(n => <option key={ n } value={ n }>{ n }</option>)}
           </select>
           {/*Dropdown de Orden*/}
-          <select onChange={ this.handleChangeOrden }>
+          <select className='menu' onChange={ this.handleChangeOrden }>
             {tipoOrdenamiento.map(n => <option key={ n } value={ n }>{ n }</option>)}
           </select>
           {/* Componente Barchart con sus respectivos props*/}
@@ -149,9 +177,10 @@ class App extends Component {
           <h1>{ `${ this.state.año } & ${ this.state.yearToSelect }` }</h1>
           <h1>{ this.state.estado }</h1>
           <h1>{ this.state.orden }</h1>
+          {/* Componente Card con sus respectivos props*/}
         </div>
+        <Card year={ this.state.año } prom={ this.state.idhProm } max={ this.state.idhMax } min={ this.state.idhMin }/>
       </div>
     );
   }
 }
-export default App;
