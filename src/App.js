@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './index.css';
 import BarChart from './BarChart';
-import { Dropdown } from './Dropdown';
-
 
   let states = ['Aguascalientes','Baja California','Baja California Sur','Campeche','Chiapas','Chihuahua','CDMX','Coahuila','Colima','Durango','Estado de México',
   'Guanajuato','Guerrero','Hidalgo','Jalisco','Michoacán','Morelos','Nayarit','Nuevo León','Oaxaca','Puebla','Querétaro','Quintana Roo','San Luis Potosí','Sinaloa','Sonora',
@@ -16,53 +14,57 @@ import { Dropdown } from './Dropdown';
   let tipoOrdenamiento = ['Alfabéticamente','Ascendente','Descendente'];
 
 class App extends Component {
+
   constructor(props) {
     super(props);
     let dataset = this.generateData();
     this.state = {
        data : [
-         {"name": "Aguascalientes",  "idh": this.generateRandom(), color: false },
-         {"name": "Baja California",  "idh": this.generateRandom(), color: false },
-         {"name": "Baja California Sur",  "idh": this.generateRandom(), color: false },
-         {"name": "Campeche",  "idh": this.generateRandom(), color: false },
-         {"name": "CDMX",  "idh": this.generateRandom(), color: false },
-         {"name": "Chiapas", "idh": this.generateRandom(), color: false },
-         {"name": "Chihuahua", "idh": this.generateRandom(), color: false },
-         {"name": "Coahuila",  "idh": this.generateRandom(), color: false },
-         {"name": "Colima",  "idh": this.generateRandom(), color: false },
-         {"name": "Durango",  "idh": this.generateRandom(), color: false },
-         {"name": "Estado de México",  "idh": this.generateRandom(), color: false },
-         {"name": "Guanajuato",  "idh": this.generateRandom(), color: false },
-         {"name": "Guerrero", "idh": this.generateRandom(), color: false },
-         {"name": "Hidalgo", "idh": this.generateRandom(), color: false },
-         {"name": "Jalisco",  "idh": this.generateRandom(), color: false },
-         {"name": "Michoacan",  "idh": this.generateRandom(), color: false },
-         {"name": "Morelos",  "idh": this.generateRandom(), color: false },
-         {"name": "Nayarit",  "idh": this.generateRandom(), color: false },
-         {"name": "Nuevo Leon", "idh": this.generateRandom(), color: false },
-         {"name": "Oaxaca", "idh": this.generateRandom(), color: false },
-         {"name": "Puebla",  "idh": this.generateRandom(), color: false },
-         {"name": "Queretaro",  "idh": this.generateRandom(), color: false },
-         {"name": "Quintana Roo",  "idh": this.generateRandom(), color: false },
-         {"name": "San Luis Potosí",  "idh": this.generateRandom(), color: false },
-         {"name": "Sinaloa", "idh": this.generateRandom(), color: false },
-         {"name": "Sonora", "idh": this.generateRandom(), color: false },
-         {"name": "Tabasco",  "idh": this.generateRandom(), color: false },
-         {"name": "Tamaulipas",  "idh": this.generateRandom(), color: false },
-         {"name": "Tlaxcala",  "idh": this.generateRandom(), color: false },
-         {"name": "Veracruz",  "idh": this.generateRandom(), color: false },
-         {"name": "Yucatán", "idh": this.generateRandom(), color: false },
-         {"name": "Zacatecas", "idh": this.generateRandom(), color: false },
+         ["Aguascalientes",  Math.random(), false ],
+         ["Baja California",  Math.random(), false ],
+         ["Baja California Sur",  Math.random(), false ],
+         ["Campeche",  Math.random(), false ],
+         ["CDMX",  Math.random(), false ],
+         ["Chiapas", Math.random(), false ],
+         ["Chihuahua", Math.random(), false ],
+         ["Coahuila",  Math.random(), false ],
+         ["Colima",  Math.random(), false ],
+         ["Durango",  Math.random(), false ],
+         ["Estado de México",  Math.random(), false ],
+         ["Guanajuato",  Math.random(), false ],
+         ["Guerrero", Math.random(), false ],
+         ["Hidalgo", Math.random(), false ],
+         ["Jalisco",  Math.random(), false ],
+         ["Michoacan",  Math.random(), false ],
+         ["Morelos",  Math.random(), false ],
+         ["Nayarit",  Math.random(), false ],
+         ["Nuevo Leon", Math.random(), false ],
+         ["Oaxaca", Math.random(), false ],
+         ["Puebla",  Math.random(), false ],
+         ["Queretaro",  Math.random(), false ],
+         ["Quintana Roo",  Math.random(), false ],
+         ["San Luis Potosí",  Math.random(), false ],
+         ["Sinaloa", Math.random(), false ],
+         ["Sonora", Math.random(), false ],
+         ["Tabasco",  Math.random(), false ],
+         ["Tamaulipas",  Math.random(), false ],
+         ["Tlaxcala",  Math.random(), false ],
+         ["Veracruz",  Math.random(), false ],
+         ["Yucatán", Math.random(), false ],
+         ["Zacatecas", Math.random(), false ],
        ],
        otraData: dataset,
-       value: '',
+       año : '1994',
+       estado: 'Aguascalientes',
+       orden: 'Alfabéticamente',
+       yearToSelect: 0,
+       realData: [],
   }
-  this.getValue = this.getValue.bind(this);
-   }
-   generateRandom() {
-     return Math.random();
-
-   }
+    this.handleChangeYear = this.handleChangeYear.bind(this);
+    this.handleChangeEstado = this.handleChangeEstado.bind(this);
+    this.handleChangeOrden = this.handleChangeOrden.bind(this);
+    this.dataReductor = this.dataReductor.bind(this);
+  }
   generateData() {
     let allData = [];
     for (let f = 0; f < years.length; f++){
@@ -84,23 +86,71 @@ class App extends Component {
     return allData;
   }
 
-  getValue(newValue) {
-    this.setState({ value: newValue })
+  dataReductor() {
+    const dataCont = [];
+      for(let i = 0; i < this.state.otraData[this.state.yearToSelect].idh.length; i++) {
+        dataCont.push([
+          this.state.otraData[this.state.yearToSelect].idh[i][1],
+          this.state.otraData[this.state.yearToSelect].idh[i][2],
+          // Si el nombre del estado coincide con el estado que se ha seleccionado, agrega un true
+          this.state.otraData[this.state.yearToSelect].idh[i][1] === this.state.estado ? true : false
+        ]);
+      }
+      console.log(dataCont);
+      return dataCont;
   }
 
-   render() {
-       this.generateData();
-       console.log(this.state.otraData);
+  findYear(yearValue){
+    for (let i = 0; i < this.state.otraData.length; i++){
+      if(this.state.otraData[i].year === yearValue ){
+        return i;
+      }
+    }
+  }
+
+  handleChangeYear(e) {
+    const yearValue = e.target.value;
+    this.setState({ año: yearValue });
+    const yearSelected = this.findYear(yearValue);
+    this.setState({ yearToSelect: yearSelected });
+  }
+  handleChangeEstado(e) {
+    const estadoValue = e.target.value;
+    this.setState({ estado: estadoValue });
+  }
+  handleChangeOrden(e) {
+    const ordenValue = e.target.value
+    this.setState({ orden: ordenValue })
+
+  }
+
+  componentDidMount() {
+  }
+  render() {
+    this.dataReductor();
     return (
       <div className="wrapper">
         <div id="d3-content">
-          <Dropdown onChange={ this.getValue } data={ states }/>
-          <Dropdown onChange={ this.getValue } data={ years }/>
-          <Dropdown onChange={ this.getValue } data={ tipoOrdenamiento }/>
+          {/*Dropdown de Año*/}
+          <select onChange={ this.handleChangeYear }>
+            {years.map(n => <option key={ n } value={ n }>{ n }</option>)}
+          </select>
+          {/*Dropdown de Estado*/}
+          <select onChange={ this.handleChangeEstado }>
+            {states.map(n => <option key={ n } value={ n }>{ n }</option>)}
+          </select>
+          {/*Dropdown de Orden*/}
+          <select onChange={ this.handleChangeOrden }>
+            {tipoOrdenamiento.map(n => <option key={ n } value={ n }>{ n }</option>)}
+          </select>
+          {/* Componente Barchart con sus respectivos props*/}
           <BarChart data={ this.state.data } value={ this.state.value }/>
-          <h1>{ this.state.value }</h1>
+          {/* Ayudas para Debuggeo */}
+          <h1>{ `${ this.state.año } & ${ this.state.yearToSelect }` }</h1>
+          <h1>{ this.state.estado }</h1>
+          <h1>{ this.state.orden }</h1>
         </div>
-    </div>
+      </div>
     );
   }
 }

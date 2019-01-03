@@ -19,10 +19,8 @@ class BarChart extends Component {
     super(props)
     this.state = {}
   }
-
   componentDidMount() {
     this.reDrawChart();
-
   }
   drawChart() {
     dataset = this.props.data; //Info para el dataset, pasados desde el componente App.js
@@ -34,8 +32,8 @@ class BarChart extends Component {
 
   //  Dominios X y Y
 
-   xDomain = (dataset.map(function (d) { return d.name }));
-   yDomain = ([0, parseFloat(d3.max(dataset, function (d) {return d.idh }))]);
+   xDomain = (dataset.map(function (d) { return d[0] }));
+   yDomain = ([0, parseFloat(d3.max(dataset, function (d) {return d[1] }))]);
 
   //Ahora las escalas
 
@@ -63,12 +61,12 @@ class BarChart extends Component {
           .data(dataset)
           .enter()
           .append( "text" )
-          .text( (d) => d.idh.toFixed(2) )
+          .text( (d) => d[1].toFixed(2) )
           .attr( 'class', 'bar-text')
-          .attr( 'y', function(d) { return  height - yDataScale(d.idh) - 3 })
+          .attr( 'y', function(d) { return  height - yDataScale(d[1]) - 3 })
           .attr( 'x', (d, i) => { return barWidth * i + 1 });
-
     }
+
     reDrawChart() {
 
     d3.select('svg').remove();
@@ -78,7 +76,8 @@ class BarChart extends Component {
     const bars = svg.append("g").attr("class", "bars")
           .attr('transform', `translate(${ margin.left }, 20)`)
     const update = bars.selectAll('.bar')
-        .data(dataset)
+          .data(dataset)
+
       update
         .enter()
         .append('rect')
@@ -86,13 +85,12 @@ class BarChart extends Component {
         .attr('height', 0 )
         .attr('width', xScale.bandwidth() )
         .attr('y', (d) => { return yScale(0) } )
-        .attr('x', (d) => { return xScale(d.name) })
-        .attr('fill', '#016FFF')
+        .attr('x', (d) => { return xScale(d[0]) })
+        .style('fill', '#016FFF')
         .transition()
         .delay((d, i) => i * 20 )
-        .attr('y', d => { return yScale(d.idh)} )
-        .attr('height', function(d) { return  (height - yScale(d.idh))  })
-
+        .attr('y', d => { return yScale(d[1])} )
+        .attr('height', function(d) { return  (height - yScale(d[1]))  })
     update.exit().remove();
     }
   render() {
