@@ -57,13 +57,12 @@ class App extends Component {
        otraData: dataset,
        value: '',
   }
-
+  this.getValue = this.getValue.bind(this);
    }
    generateRandom() {
      return Math.random();
 
    }
-
   generateData() {
     let allData = [];
     for (let f = 0; f < years.length; f++){
@@ -82,7 +81,6 @@ class App extends Component {
         idh: chartData
       });
     }
-    console.log(allData);
     return allData;
   }
 
@@ -92,7 +90,7 @@ class App extends Component {
 
    render() {
        this.generateData();
-       console.log(this.state.value)
+       console.log(this.state.otraData);
     return (
       <div className="wrapper">
         <div id="d3-content">

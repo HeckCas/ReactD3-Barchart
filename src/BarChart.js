@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import './index.css';
 
-let chart, dataset, xScale, yScale, xAxis, yAxis;
+let dataset, xScale, yScale;
 let xDomain, yDomain, svg;
 let margin = {top: 20, right: 20, bottom: 200, left: 60},
 width = 1000 - margin.left - margin.right,
 height = 500 - margin.top - margin.bottom;
-let barPadding = 5;
 let barWidth = ((width / 32));
 let yDataScale = d3.scaleLinear()
 .domain([0, 1])
@@ -22,27 +21,12 @@ class BarChart extends Component {
   }
 
   componentDidMount() {
-    this.drawChart();
+    this.reDrawChart();
 
   }
-
-  toggleColor() {
-    for(let i=0; i< dataset.length; i++)
-    {
-      if( this.props.value === dataset[i].name){
-        dataset[i].color = true;
-      }
-    }
-    console.log(dataset);
-  }
-
   drawChart() {
-
     dataset = this.props.data; //Info para el dataset, pasados desde el componente App.js
-    this.toggleColor();
-    barWidth = ((width / dataset.length));
     //Drawing the chart
-
     svg =  d3.select('#d3-content')
         .append('svg')
         .attr('width', width + margin.left + margin.right)
@@ -57,9 +41,8 @@ class BarChart extends Component {
 
    xScale = d3.scaleBand().padding(0.1).domain(xDomain).rangeRound([0, width]);
    yScale = d3.scaleLinear().domain(yDomain).rangeRound([height,0]);
-
-   console.log(typeof(xScale));
-   xAxis = svg.append("g")
+   //xAxis
+   svg.append("g")
       .attr("class", "axis")
       .attr("transform", `translate(${ margin.left }, ${ margin.top + height })`)
       .call(d3.axisBottom( xScale ))
@@ -70,8 +53,8 @@ class BarChart extends Component {
       .attr("transform", 'rotate(-45)')
       .style("text-anchor", 'end')
       .attr("class", "bar-text")
-
-   yAxis = svg.append("g")
+      //yAxis
+   svg.append("g")
       .attr("class", "axis")
       .attr("transform", `translate(${ margin.left }, ${ margin.top })`)
       .call(d3.axisLeft(yScale))
@@ -85,31 +68,33 @@ class BarChart extends Component {
           .attr( 'y', function(d) { return  height - yDataScale(d.idh) - 3 })
           .attr( 'x', (d, i) => { return barWidth * i + 1 });
 
+    }
+    reDrawChart() {
 
-      const bars = svg.append("g").attr("class", "bars")
-            .attr('transform', `translate(${ margin.left }, 20)`)
-          // console.log(xDomain);
-      const update = bars.selectAll('.bar')
-          .data(dataset)
-        console.log(yDomain);
-        console.log(this.props.value);
-        update
-          .enter()
-          .append('rect')
-          .attr('class', 'bar')
-          .attr('height', 0 )
-          .attr('width', xScale.bandwidth() )
-          .attr('y', (d) => { return yScale(0) } )
-          .attr('x', (d) => { return xScale(d.name) })
-          .attr('fill', '#016FFF')
-          .transition()
-          .delay((d, i) => i * 20 )
-          .attr('y', d => { return yScale(d.idh)} )
-          .attr('height', function(d) { return  (height - yScale(d.idh))  })
-          // .attr('transform','rotate(90)');
+    d3.select('svg').remove();
 
+    this.drawChart();
 
-      }
+    const bars = svg.append("g").attr("class", "bars")
+          .attr('transform', `translate(${ margin.left }, 20)`)
+    const update = bars.selectAll('.bar')
+        .data(dataset)
+      update
+        .enter()
+        .append('rect')
+        .attr('class', 'bar')
+        .attr('height', 0 )
+        .attr('width', xScale.bandwidth() )
+        .attr('y', (d) => { return yScale(0) } )
+        .attr('x', (d) => { return xScale(d.name) })
+        .attr('fill', '#016FFF')
+        .transition()
+        .delay((d, i) => i * 20 )
+        .attr('y', d => { return yScale(d.idh)} )
+        .attr('height', function(d) { return  (height - yScale(d.idh))  })
+
+    update.exit().remove();
+    }
   render() {
     return (<div></div>);
   }

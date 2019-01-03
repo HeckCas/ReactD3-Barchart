@@ -12,7 +12,7 @@ export class Dropdown extends Component {
   render() {
     let opcion = this.props.data;
     return (
-      <select onChange={ this.handleChange } onChange={ this.isBoolan }>
+      <select onChange={ this.handleChange }>
         {opcion.map(n => <option value={ n }>{ n }</option>)}
       </select>
     );
