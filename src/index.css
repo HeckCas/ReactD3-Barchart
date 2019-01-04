@@ -1,25 +1,25 @@
-@import url('https://fonts.googleapis.com/css?family=Bungee');
+@import url('https://fonts.googleapis.com/css?family=Poppins');
 * {
   margin: 0;
   padding: 0;
 }
 
 #d3-content {
-  margin-top: 5%;
   width: 100%;
   height: auto;
   margin: 0 auto;
   text-align: center;
+  position: absolute;
 }
 
 .bar-text {
-  fill: #293234;
   font-size: 10px;
   font-family: 'Century Gothic';
 }
 
 .menu {
-  background: rgba(0,0,0, 0.2);
+  background: rgba(68, 65, 65, 0.075);
+  border: 2px #6BB1FF solid;
   height: 36px;
   width: 150px;
   font-size: 15px;
@@ -31,13 +31,17 @@
 .card {
   width: 40%;
   height: auto;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(110, 108, 108, 0.979);
   padding: 1% 1.5%;
   text-align: center;
   color: white;
-  margin: auto;
-  margin-bottom: 1.2%;
-  font-family: 'Century Gothic';
+  margin: 0 auto;
+  font-family: 'Poppins', sans-serif ;
+  font-weight: 50;
   border-top-left-radius: 30px;
   border-bottom-right-radius: 30px;
+  border: 5px #6BB1FF solid;
+  position: relative;
+  left: 0;
+  top:600px;
 }

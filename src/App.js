@@ -134,10 +134,8 @@ export class App extends Component {
             {tipoOrdenamiento.map(n => <option key={ n } value={ n }>{ n }</option>)}
           </select>
           {/* Componente Barchart con sus respectivos props*/}
-          <BarChart data={ ocuspocus } orden={ this.state.tipoOrdenamiento } año={ this.state.yearToSelect }/>
+          <BarChart data={ ocuspocus } orden={ this.state.orden } año={ this.state.yearToSelect }/>
           {/* Ayudas para Debuggeo */}
-          <h1>{ `${ this.state.año } & ${ this.state.yearToSelect }` }</h1>
-          <h1>{ this.state.estado }</h1>
           <h1>{ this.state.orden }</h1>
           {/* Componente Card con sus respectivos props*/}
         </div>
