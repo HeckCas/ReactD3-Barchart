@@ -10,13 +10,12 @@ height = 500 - margin.top - margin.bottom;
 
 export class BarChart extends Component {
   dataset = this.props.data;
+  
   constructor(props){
-    super(props)
-    this.state = {}
+    super(props);
+    this.state = {};
   }
-  componentDidMount() {
-    this.reDrawChart();
-  }
+  
   drawChart() {
     dataset = this.props.data; //Info para el dataset, pasados desde el componente App.js
     //Drawing the chart
@@ -71,7 +70,7 @@ export class BarChart extends Component {
         .attr('width', xScale.bandwidth() )
         .attr('y', (d) => { return yScale(0) } )
         .attr('x', (d) => { return xScale(d[0]) })
-        .style('fill', function(d) { if(d[2]) return '#B0F566';
+        .style('fill', function(d) { if(d[2]) return '#5CC9F5';
                                     else return '#016FFF';})
         .transition()
         .delay((d, i) => i * 20 )
@@ -93,6 +92,9 @@ export class BarChart extends Component {
     update.exit().remove();
     }
   render() {
+    this.reDrawChart();
+    console.log(dataset);
+    
     return (<div></div>);
   }
 }

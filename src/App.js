@@ -11,6 +11,7 @@ import { Card } from './Card'
   'TAB','TAM','TLA','VER','YUC','ZAC'];
   let years = ['1994','1995','1996','1997','1998','1999','2000'];
   let tipoOrdenamiento = ['Alfabéticamente','Ascendente','Descendente'];
+  let ocuspocus = [];
 
 export class App extends Component {
 
@@ -18,49 +19,14 @@ export class App extends Component {
     super(props);
     let dataset = this.generateData();
     this.state = {
-     data : [
-       ["Aguascalientes",  Math.random(), false ],
-       ["Baja California",  Math.random(), false ],
-       ["Baja California Sur",  Math.random(), false ],
-       ["Campeche",  Math.random(), false ],
-       ["CDMX",  Math.random(), false ],
-       ["Chiapas", Math.random(), false ],
-       ["Chihuahua", Math.random(), false ],
-       ["Coahuila",  Math.random(), true ],
-       ["Colima",  Math.random(), false ],
-       ["Durango",  Math.random(), false ],
-       ["Estado de México",  Math.random(), false ],
-       ["Guanajuato",  Math.random(), false ],
-       ["Guerrero", Math.random(), false ],
-       ["Hidalgo", Math.random(), false ],
-       ["Jalisco",  Math.random(), false ],
-       ["Michoacan",  Math.random(), false ],
-       ["Morelos",  Math.random(), false ],
-       ["Nayarit",  Math.random(), false ],
-       ["Nuevo Leon", Math.random(), false ],
-       ["Oaxaca", Math.random(), false ],
-       ["Puebla",  Math.random(), false ],
-       ["Queretaro",  Math.random(), false ],
-       ["Quintana Roo",  Math.random(), false ],
-       ["San Luis Potosí",  Math.random(), false ],
-       ["Sinaloa", Math.random(), false ],
-       ["Sonora", Math.random(), false ],
-       ["Tabasco",  Math.random(), false ],
-       ["Tamaulipas",  Math.random(), false ],
-       ["Tlaxcala",  Math.random(), false ],
-       ["Veracruz",  Math.random(), false ],
-       ["Yucatán", Math.random(), false ],
-       ["Zacatecas", Math.random(), false ],
-       ],
        otraData: dataset,
        año : '1994',
        estado: 'Aguascalientes',
        orden: 'Alfabéticamente',
        yearToSelect: 0,
-       realData: [],
-       idhProm: '0',
-       idhMax: '0',
-       idhMin: '0',
+       idhProm: '0.51',
+       idhMax: '0.98',
+       idhMin: '0.04',
     }
     this.handleChangeYear = this.handleChangeYear.bind(this);
     this.handleChangeEstado = this.handleChangeEstado.bind(this);
@@ -100,9 +66,16 @@ export class App extends Component {
           this.state.otraData[this.state.yearToSelect].idh[i][1] === this.state.estado ? true : false
         ]);
       }
-      console.log(dataCont);
       return dataCont;
 
+  }
+
+  handleChangeYear(e) {
+    const yearValue = e.target.value;
+    this.setState({ año: yearValue });
+    const yearSelected = this.findYear(yearValue);
+    this.setState({ yearToSelect: yearSelected });
+    this.generateSummary(yearSelected);
   }
 
   findYear(yearValue){
@@ -112,24 +85,16 @@ export class App extends Component {
       }
     }
   }
-
-  handleChangeYear(e) {
-    const yearValue = e.target.value;
-    this.setState({ año: yearValue });
-    const yearSelected = this.findYear(yearValue);
-    this.setState({ yearToSelect: yearSelected });
-    this.generateSummary(yearSelected)
-  }
-
+  
   handleChangeEstado(e) {
     const estadoValue = e.target.value;
     this.setState({ estado: estadoValue });
   }
 
   handleChangeOrden(e) {
-    const ordenValue = e.target.value
-    this.setState({ orden: ordenValue })
-
+    const ordenValue = e.target.value;
+    this.setState({ orden: ordenValue });
+    
   }
 
   generateSummary(yearSelected){
@@ -151,11 +116,8 @@ export class App extends Component {
       this.setState({ idhProm: promIDHstr, idhMax: IDHmax, idhMin: IDHmin })
     }
 
-  // componentDidMount() {
-  //   this.dataReductor();
-  // }
   render() {
-    this.dataReductor();
+    ocuspocus = this.dataReductor();
     return (
       <div className="wrapper">
         <div id="d3-content">
@@ -172,7 +134,7 @@ export class App extends Component {
             {tipoOrdenamiento.map(n => <option key={ n } value={ n }>{ n }</option>)}
           </select>
           {/* Componente Barchart con sus respectivos props*/}
-          <BarChart data={ this.state.data } value={ this.state.value }/>
+          <BarChart data={ ocuspocus } orden={ this.state.tipoOrdenamiento } año={ this.state.yearToSelect }/>
           {/* Ayudas para Debuggeo */}
           <h1>{ `${ this.state.año } & ${ this.state.yearToSelect }` }</h1>
           <h1>{ this.state.estado }</h1>
