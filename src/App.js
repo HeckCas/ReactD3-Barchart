@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './index.css';
 import { BarChart } from './BarChart';
-import { Card } from './Card'
+import { Card } from './Card';
+import './index.css';
 
   let states = ['Aguascalientes','Baja California','Baja California Sur','Campeche','Chiapas','Chihuahua','CDMX','Coahuila','Colima','Durango','Estado de México',
   'Guanajuato','Guerrero','Hidalgo','Jalisco','Michoacán','Morelos','Nayarit','Nuevo León','Oaxaca','Puebla','Querétaro','Quintana Roo','San Luis Potosí','Sinaloa','Sonora',
@@ -24,9 +24,9 @@ export class App extends Component {
        estado: 'Aguascalientes',
        orden: 'Alfabéticamente',
        yearToSelect: 0,
-       idhProm: '0.51',
-       idhMax: '0.98',
-       idhMin: '0.04',
+       idhProm: '0',
+       idhMax: '0',
+       idhMin: '0',
     }
     this.handleChangeYear = this.handleChangeYear.bind(this);
     this.handleChangeEstado = this.handleChangeEstado.bind(this);
@@ -134,9 +134,7 @@ export class App extends Component {
             {tipoOrdenamiento.map(n => <option key={ n } value={ n }>{ n }</option>)}
           </select>
           {/* Componente Barchart con sus respectivos props*/}
-          <BarChart data={ ocuspocus } orden={ this.state.orden } año={ this.state.yearToSelect }/>
-          {/* Ayudas para Debuggeo */}
-          <h1>{ this.state.orden }</h1>
+          <BarChart data={ ocuspocus } orden={ this.state.orden }/>
           {/* Componente Card con sus respectivos props*/}
         </div>
         <Card year={ this.state.año } prom={ this.state.idhProm } max={ this.state.idhMax } min={ this.state.idhMin }/>
