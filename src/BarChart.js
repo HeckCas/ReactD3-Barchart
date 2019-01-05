@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import './index.css';
 
-let dataset, xScale, yScale;
+let xScale, yScale;
 let xDomain, yDomain, svg;
 let margin = {top: 20, right: 20, bottom: 200, left: 60},
 width = 1000 - margin.left - margin.right,
@@ -18,28 +18,27 @@ export class BarChart extends Component {
   tipoOrdenamiento() {
     switch (this.props.orden) {
       case 'Ascendente': // Ordenar IDH del menor al mayor
-        dataset[1].sort(function(a, b){return a > b ? 1 : -1});
+        this.dataset.sort(function(a, b){return a[1] > b[1] ? 1 : -1});
         break;
 
       case 'Descendente': // Ordenar IDH del mayor al menor
-        dataset[1].sort(function(a, b){return b > a ? 1 : -1});
+        this.dataset.sort(function(a, b){return a[1] < b[1] ? 1 : -1});
         break;
 
       case 'Alfabéticamente': // Ordenar alfabéticamente los nombres de estados
-        dataset[1].sort();
+        this.dataset.sort();
         break;
 
       default: // Alfabéticamente por defecto
-        dataset[1].sort();
+        this.dataset.sort();
         break;
     }
-    console.log(this.props.orden);
-    
   }
 
   drawChart() {
-    dataset = this.props.data; //Info para el dataset, pasados desde el componente App.js
+    this.dataset = this.props.data; //Info para el this.dataset, pasados desde el componente App.js
     //Drawing the chart
+    this.tipoOrdenamiento();
     svg =  d3.select('#d3-content')
         .append('svg')
         .attr('width', width + margin.left + margin.right)
@@ -47,8 +46,8 @@ export class BarChart extends Component {
 
   //  Dominios X y Y
 
-   xDomain = (dataset.map(function (d) { return d[0] }));
-   yDomain = ([0, parseFloat(d3.max(dataset, function (d) {return d[1] }))]);
+   xDomain = (this.dataset.map(function (d) { return d[0] }));
+   yDomain = ([0, parseFloat(d3.max(this.dataset, function (d) {return d[1] }))]);
 
   //Ahora las escalas
 
@@ -81,7 +80,7 @@ export class BarChart extends Component {
   const bars = svg.append("g").attr("class", "bars")
         .attr('transform', `translate(${ margin.left }, 20)`)
   const update = bars.selectAll('.bar')
-        .data(dataset)
+        .data(this.dataset)
 
     update
       .enter()
@@ -98,7 +97,7 @@ export class BarChart extends Component {
       .attr('height', function(d) { return  (height - yScale(d[1]))  })
 
   bars.selectAll("text")
-      .data(dataset)
+      .data(this.dataset)
       .enter()
       .append( "text" )
       .text( (d) => d[1].toFixed(2))
