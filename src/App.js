@@ -71,12 +71,12 @@ export class App extends Component {
   handleChangeYear(e) {
     const yearValue = e.target.value;
     this.setState({ año: yearValue });
-    const yearSelected = this.findYear(yearValue);
+    const yearSelected = this.findYearIndex(yearValue);
     this.setState({ yearToSelect: yearSelected });
     this.generateDataCard(yearSelected);
   }
 
-  findYear(yearValue){
+  findYearIndex(yearValue){
     for (let i = 0; i < this.state.otraData.length; i++){
       if(this.state.otraData[i].year === yearValue ){
         return i;
