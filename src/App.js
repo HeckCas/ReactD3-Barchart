@@ -3,7 +3,7 @@ import { BarChart } from './BarChart';
 import { Card } from './Card';
 import './index.css';
 
-  let states = ['Aguascalientes','Baja California','Baja California Sur','Campeche','Chiapas','Chihuahua','CDMX','Coahuila','Colima','Durango','Estado de México',
+  let states = ['Aguascalientes','Baja California','Baja california Sur','Campeche','Cdmx','Chiapas','Chihuahua','Coahuila','Colima','Durango','Estado de México',
   'Guanajuato','Guerrero','Hidalgo','Jalisco','Michoacán','Morelos','Nayarit','Nuevo León','Oaxaca','Puebla','Querétaro','Quintana Roo','San Luis Potosí','Sinaloa','Sonora',
   'Tabasco','Tamaulipas','Tlaxcala','Veracruz','Yucatán','Zacatecas'];
   let statesAbv = ['AGU','BCN','BCS','CAM','CHP','CHH','CMX','COA','COL','DUR','MEX',
@@ -32,41 +32,39 @@ export class App extends Component {
     this.handleChangeEstado = this.handleChangeEstado.bind(this);
     this.handleChangeOrden = this.handleChangeOrden.bind(this);
     this.dataReductor = this.dataReductor.bind(this);
-    this.generateSummary = this.generateSummary.bind(this);
+    this.generateDataCard = this.generateDataCard.bind(this);
   }
 
   generateData() {
-    let allData = [];
-    for (let f = 0; f < years.length; f++){
-      let chartData = [];
-      // ['estado-abrv', 'estado-comple' ,idh]
+    let datasetComplete = [];
+    for (let f = 0; f < years.length; f++) {
+      let datasetAux = [];
       for (let c = 0; c < states.length; c++) {
-        chartData.push([
+        datasetAux.push([
           statesAbv[c],
           states[c],
           Math.random()
       ]);
       }
-      // { { year : 'año1' , idh : Array(32) } , { year : 'año2' } }
-        allData.push({
+        datasetComplete.push({
         year: years[f],
-        idh: chartData
+        idh: datasetAux
       });
+
     }
-    return allData;
+    return datasetComplete;
   }
 
   dataReductor() {
-    const dataCont = [];
-      for(let i = 0; i < this.state.otraData[this.state.yearToSelect].idh.length; i++) {
-        dataCont.push([
+    const realData = [];
+      for(let i = 0; i < 32; i++) {
+        realData.push([
           this.state.otraData[this.state.yearToSelect].idh[i][1],
           this.state.otraData[this.state.yearToSelect].idh[i][2],
-          // Si el nombre del estado coincide con el estado que se ha seleccionado, agrega un true
           this.state.otraData[this.state.yearToSelect].idh[i][1] === this.state.estado ? true : false
         ]);
       }
-      return dataCont;
+      return realData;
 
   }
 
@@ -75,7 +73,7 @@ export class App extends Component {
     this.setState({ año: yearValue });
     const yearSelected = this.findYear(yearValue);
     this.setState({ yearToSelect: yearSelected });
-    this.generateSummary(yearSelected);
+    this.generateDataCard(yearSelected);
   }
 
   findYear(yearValue){
@@ -97,21 +95,19 @@ export class App extends Component {
     
   }
 
-  generateSummary(yearSelected){
+  generateDataCard(yearSelected){
       //Obtener el promedio de todos los IDH
       let promIDH = 0;
       for(let i = 0; i < this.state.otraData[yearSelected].idh.length; i++){
         promIDH += this.state.otraData[yearSelected].idh[i][2]; // Suma todos los IDH de un año determinado
       }
-      promIDH = (promIDH / 32); // Calcula el promedio
+      promIDH = (promIDH / 32);
       let promIDHstr = promIDH.toFixed(2);
-      //Obtener el IDH más alto
-      this.state.otraData[yearSelected].idh.sort(function(a, b){return b[2] > a[2] ? 1 : -1}); // Obtiene el IDH del estado que quedó
-                                                                                           // como el más alto en el ordenamiento
+      //IDH más alto
+      this.state.otraData[yearSelected].idh.sort(function(a, b){return b[2] > a[2] ? 1 : -1}); 
       let IDHmax = this.state.otraData[yearSelected].idh[1][2].toFixed(2);
-      //Obtener el ID más bajo
-      this.state.otraData[yearSelected].idh.sort(function(a, b){return a[2] > b[2] ? 1 : -1}); // Obtiene el IDH del estado que quedó
-                                                                                           // como el más bajo en el ordenamiento
+      //IDH más bajo
+      this.state.otraData[yearSelected].idh.sort(function(a, b){return a[2] > b[2] ? 1 : -1});
       let IDHmin = this.state.otraData[yearSelected].idh[1][2].toFixed(2);
       this.setState({ idhProm: promIDHstr, idhMax: IDHmax, idhMin: IDHmin })
     }
